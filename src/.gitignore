@@ -1,0 +1,9 @@
+xml_format.h
+.libs
+*.la
+*.o
+*.so
+*.lo
+splashy
+splashy_config
+splashy_update
