@@ -1,0 +1,374 @@
+Index: src/splashy_config-functions.c
+===================================================================
+--- src/splashy_config-functions.c
++++ src/splashy_config-functions.c
+@@ -159,7 +159,7 @@ install_theme (gchar * tarball_path)
+                 }
+                 else
+                 {
+-                        if (g_strncasecmp (mime_type, "POSIX tar archive", 17)
++                        if (g_ascii_strncasecmp (mime_type, "POSIX tar archive", 17)
+                             != 0)
+                         {
+                                 PRINT_FAIL;
+@@ -249,7 +249,7 @@ install_theme (gchar * tarball_path)
+                                                   (SPL_THEMES_DIR), _theme,
+                                                   NULL);
+ 
+-                        if (g_strcasecmp
++                        if (g_ascii_strcasecmp
+                             (target_path,
+                              splashy_get_config_string (SPL_THEMES_DIR)) != 0)
+                         {
+@@ -329,7 +329,7 @@ remove_theme (gchar * theme_name)
+                 PRINT_FAIL;
+                 g_printerr (_("The theme does not exist!\n"));
+         }
+-        else if (g_strcasecmp
++        else if (g_ascii_strcasecmp
+                  (theme_name,
+                   splashy_get_config_string (SPL_CURRENT_THEME)) == 0)
+         {
+@@ -614,7 +614,7 @@ create_theme (XmlFields * NewTheme)
+                  * upload the boot image 
+                  */
+                 gchar *dest = g_build_filename (theme_path,
+-                                                g_basename (NewTheme->
++                                                g_path_get_basename (NewTheme->
+                                                             bg_boot),
+                                                 NULL);
+                 if (!copy_file (NewTheme->bg_boot, dest))
+@@ -632,14 +632,14 @@ create_theme (XmlFields * NewTheme)
+                 else
+                 {
+                         NewTheme->bg_boot =
+-                                g_strdup (g_basename (NewTheme->bg_boot));
++                                g_strdup (g_path_get_basename (NewTheme->bg_boot));
+                 }
+ 
+                 /*
+                  * upload the shutdown image 
+                  */
+                 dest = g_build_filename (theme_path,
+-                                         g_basename (NewTheme->bg_shutdown),
++                                         g_path_get_basename (NewTheme->bg_shutdown),
+                                          NULL);
+                 if (!copy_file (NewTheme->bg_shutdown, dest))
+                 {
+@@ -656,14 +656,14 @@ create_theme (XmlFields * NewTheme)
+                 else
+                 {
+                         NewTheme->bg_shutdown =
+-                                g_strdup (g_basename (NewTheme->bg_shutdown));
++                                g_strdup (g_path_get_basename (NewTheme->bg_shutdown));
+                 }
+ 
+                 /*
+                  * upload the error image 
+                  */
+                 dest = g_build_filename (theme_path,
+-                                         g_basename (NewTheme->bg_error),
++                                         g_path_get_basename (NewTheme->bg_error),
+                                          NULL);
+                 if (!copy_file (NewTheme->bg_error, dest))
+                 {
+@@ -680,14 +680,14 @@ create_theme (XmlFields * NewTheme)
+                 else
+                 {
+                         NewTheme->bg_error =
+-                                g_strdup (g_basename (NewTheme->bg_error));
++                                g_strdup (g_path_get_basename (NewTheme->bg_error));
+                 }
+ 
+                 /*
+                  * upload the resume image 
+                  */
+                 dest = g_build_filename (theme_path,
+-                                         g_basename (NewTheme->bg_resume),
++                                         g_path_get_basename (NewTheme->bg_resume),
+                                          NULL);
+                 if (!copy_file (NewTheme->bg_resume, dest))
+                 {
+@@ -704,14 +704,14 @@ create_theme (XmlFields * NewTheme)
+                 else
+                 {
+                         NewTheme->bg_resume =
+-                                g_strdup (g_basename (NewTheme->bg_resume));
++                                g_strdup (g_path_get_basename (NewTheme->bg_resume));
+                 }
+ 
+                 /*
+                  * upload the suspend image 
+                  */
+                 dest = g_build_filename (theme_path,
+-                                         g_basename (NewTheme->bg_suspend),
++                                         g_path_get_basename (NewTheme->bg_suspend),
+                                          NULL);
+                 if (!copy_file (NewTheme->bg_suspend, dest))
+                 {
+@@ -728,7 +728,7 @@ create_theme (XmlFields * NewTheme)
+                 else
+                 {
+                         NewTheme->bg_suspend =
+-                                g_strdup (g_basename (NewTheme->bg_suspend));
++                                g_strdup (g_path_get_basename (NewTheme->bg_suspend));
+                 }
+ 
+                 /*
+@@ -737,7 +737,7 @@ create_theme (XmlFields * NewTheme)
+                 if (font_file_exists)
+                 {
+                         dest = g_build_filename (theme_path,
+-                                                 g_basename (NewTheme->
++                                                 g_path_get_basename (NewTheme->
+                                                              textfont_file),
+                                                  NULL);
+                         if (!copy_file (NewTheme->textfont_file, dest))
+@@ -751,7 +751,7 @@ create_theme (XmlFields * NewTheme)
+                         else
+                         {
+                                 NewTheme->textfont_file =
+-                                        g_strdup (g_basename
++                                        g_strdup (g_path_get_basename
+                                                   (NewTheme->textfont_file));
+                         }
+                 }
+@@ -906,7 +906,7 @@ get_fields (void)
+                     &NewTheme->pb_on_boot);
+ 
+         // Direction on boot
+-        if (g_strcasecmp (NewTheme->pb_on_boot, "yes") == 0)
++        if (g_ascii_strcasecmp (NewTheme->pb_on_boot, "yes") == 0)
+                 ask_string (_(" Direction ? (forward|backward)"),
+                             &NewTheme->pb_dir_boot);
+ 
+@@ -916,7 +916,7 @@ get_fields (void)
+                     &NewTheme->pb_on_shutdown);
+ 
+         // Direction on shutdown
+-        if (g_strcasecmp (NewTheme->pb_on_shutdown, "yes") == 0)
++        if (g_ascii_strcasecmp (NewTheme->pb_on_shutdown, "yes") == 0)
+                 ask_string (_(" Direction ? (forward|backward)"),
+                             &NewTheme->pb_dir_shutdown);
+ 
+@@ -926,7 +926,7 @@ get_fields (void)
+                     &NewTheme->pb_on_resume);
+ 
+         // Direction on resume
+-        if (g_strcasecmp (NewTheme->pb_on_resume, "yes") == 0)
++        if (g_ascii_strcasecmp (NewTheme->pb_on_resume, "yes") == 0)
+                 ask_string (_(" Direction ? (forward|backward)"),
+                             &NewTheme->pb_dir_resume);
+ 
+@@ -936,15 +936,15 @@ get_fields (void)
+                     &NewTheme->pb_on_suspend);
+ 
+         // Direction on suspend
+-        if (g_strcasecmp (NewTheme->pb_on_suspend, "yes") == 0)
++        if (g_ascii_strcasecmp (NewTheme->pb_on_suspend, "yes") == 0)
+                 ask_string (_(" Direction ? (forward|backward)"),
+                             &NewTheme->pb_dir_suspend);
+ 
+         // Progressbar
+-        if ((g_strcasecmp (NewTheme->pb_on_boot, "yes") == 0)
+-            || (g_strcasecmp (NewTheme->pb_on_shutdown, "yes") == 0)
+-            || (g_strcasecmp (NewTheme->pb_on_resume, "yes") == 0)
+-            || (g_strcasecmp (NewTheme->pb_on_suspend, "yes") == 0))
++        if ((g_ascii_strcasecmp (NewTheme->pb_on_boot, "yes") == 0)
++            || (g_ascii_strcasecmp (NewTheme->pb_on_shutdown, "yes") == 0)
++            || (g_ascii_strcasecmp (NewTheme->pb_on_resume, "yes") == 0)
++            || (g_ascii_strcasecmp (NewTheme->pb_on_suspend, "yes") == 0))
+         {
+                 g_print (_("Progress bar\n"));
+ 
+@@ -1036,7 +1036,7 @@ get_fields (void)
+                             &NewTheme->pb_border_show);
+ 
+                 // Border
+-                if (g_strcasecmp (NewTheme->pb_border_show, "yes") == 0)
++                if (g_ascii_strcasecmp (NewTheme->pb_border_show, "yes") == 0)
+                 {
+                         g_print (_(" Border color\n"));
+ 
+@@ -1064,8 +1064,8 @@ get_fields (void)
+                     &NewTheme->textbox_show);
+ 
+         // Text box
+-        if ((g_strcasecmp (NewTheme->verbose, "yes") == 0)
+-            || (g_strcasecmp (NewTheme->textbox_show, "yes") == 0))
++        if ((g_ascii_strcasecmp (NewTheme->verbose, "yes") == 0)
++            || (g_ascii_strcasecmp (NewTheme->textbox_show, "yes") == 0))
+         {
+                 g_print (_("Text box\n"));
+ 
+@@ -1143,7 +1143,7 @@ get_fields (void)
+                             (" Do you want a border around the text box ? (yes|no)"),
+                             &NewTheme->textbox_border_show);
+ 
+-                if (g_strcasecmp (NewTheme->textbox_border_show, "yes") == 0)
++                if (g_ascii_strcasecmp (NewTheme->textbox_border_show, "yes") == 0)
+                 {
+                         g_print (_("  Border color\n"));
+ 
+@@ -1279,7 +1279,7 @@ theme_name_exists (const gchar * theme_n
+         // Check if a theme with the same name exists
+         DEBUG_PRINT ("splashy_config: Checking if '%s' already exists\n",
+                      theme_path);
+-        if (g_strcasecmp
++        if (g_ascii_strcasecmp
+             (theme_path, splashy_get_config_string (SPL_THEMES_DIR)) != 0)
+         {
+                 if (g_file_test (theme_path, G_FILE_TEST_IS_DIR))
+@@ -1324,7 +1324,7 @@ check_image (const gchar * filename)
+                 DEBUG_PRINT
+                         ("splashy_config: Checking the file mime type: %s",
+                          mime_type);
+-                mime_ret = g_strncasecmp (mime_type, "image/", 6);
++                mime_ret = g_ascii_strncasecmp (mime_type, "image/", 6);
+                 magic_close (cookie);
+ 
+                 if (mime_ret != 0)
+@@ -1412,8 +1412,8 @@ check_fields (XmlFields * CheckMe)
+ 
+         // Progressbar: a border ?
+         if (CheckMe->pb_border_show == NULL
+-            || ((g_strcasecmp (CheckMe->pb_border_show, "yes") != 0
+-                 && g_strcasecmp (CheckMe->pb_border_show, "no") != 0)))
++            || ((g_ascii_strcasecmp (CheckMe->pb_border_show, "yes") != 0
++                 && g_ascii_strcasecmp (CheckMe->pb_border_show, "no") != 0)))
+         {
+                 CheckMe->pb_border_show = NULL;
+                 CheckMe->pb_border_show = g_strdup ("no");
+@@ -1453,40 +1453,40 @@ check_fields (XmlFields * CheckMe)
+ 
+         // Progressbar: direction on boot
+         if (CheckMe->pb_dir_boot == NULL
+-            || (g_strcasecmp (CheckMe->pb_dir_boot, "forward") != 0
+-                && g_strcasecmp (CheckMe->pb_dir_boot, "backward") != 0))
++            || (g_ascii_strcasecmp (CheckMe->pb_dir_boot, "forward") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_dir_boot, "backward") != 0))
+         {
+                 CheckMe->pb_dir_boot = g_strdup ("forward");
+         }
+ 
+         // Progressbar: direction on shutdown
+         if (CheckMe->pb_dir_shutdown == NULL
+-            || (g_strcasecmp (CheckMe->pb_dir_shutdown, "forward") != 0
+-                && g_strcasecmp (CheckMe->pb_dir_shutdown, "backward") != 0))
++            || (g_ascii_strcasecmp (CheckMe->pb_dir_shutdown, "forward") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_dir_shutdown, "backward") != 0))
+         {
+                 CheckMe->pb_dir_shutdown = g_strdup ("backward");
+         }
+ 
+         // Progressbar: direction on resume
+         if (CheckMe->pb_dir_resume == NULL
+-            || (g_strcasecmp (CheckMe->pb_dir_resume, "forward") != 0
+-                && g_strcasecmp (CheckMe->pb_dir_resume, "backward") != 0))
++            || (g_ascii_strcasecmp (CheckMe->pb_dir_resume, "forward") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_dir_resume, "backward") != 0))
+         {
+                 CheckMe->pb_dir_resume = g_strdup ("forward");
+         }
+ 
+         // Progressbar: direction on suspend
+         if (CheckMe->pb_dir_suspend == NULL
+-            || (g_strcasecmp (CheckMe->pb_dir_suspend, "forward") != 0
+-                && g_strcasecmp (CheckMe->pb_dir_suspend, "backward") != 0))
++            || (g_ascii_strcasecmp (CheckMe->pb_dir_suspend, "forward") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_dir_suspend, "backward") != 0))
+         {
+                 CheckMe->pb_dir_suspend = g_strdup ("backward");
+         }
+ 
+         // A textbox ?
+         if (CheckMe->textbox_show == NULL
+-            || (g_strcasecmp (CheckMe->textbox_show, "yes") != 0
+-                && g_strcasecmp (CheckMe->textbox_show, "no") != 0))
++            || (g_ascii_strcasecmp (CheckMe->textbox_show, "yes") != 0
++                && g_ascii_strcasecmp (CheckMe->textbox_show, "no") != 0))
+         {
+                 CheckMe->textbox_show = g_strdup ("no");
+         }
+@@ -1545,8 +1545,8 @@ check_fields (XmlFields * CheckMe)
+ 
+         // Textbox: a border ?
+         if (CheckMe->textbox_border_show == NULL
+-            || (g_strcasecmp (CheckMe->textbox_border_show, "yes") !=
+-                0 && g_strcasecmp (CheckMe->textbox_border_show, "no") != 0))
++            || (g_ascii_strcasecmp (CheckMe->textbox_border_show, "yes") !=
++                0 && g_ascii_strcasecmp (CheckMe->textbox_border_show, "no") != 0))
+         {
+                 CheckMe->textbox_border_show = g_strdup ("no");
+         }
+@@ -1585,56 +1585,56 @@ check_fields (XmlFields * CheckMe)
+ 
+         // Autoverbose on error ?
+         if (CheckMe->verbose == NULL
+-            || (g_strcasecmp (CheckMe->verbose, "yes") != 0
+-                && g_strcasecmp (CheckMe->verbose, "no")))
++            || (g_ascii_strcasecmp (CheckMe->verbose, "yes") != 0
++                && g_ascii_strcasecmp (CheckMe->verbose, "no")))
+         {
+                 CheckMe->verbose = g_strdup ("no");
+         }
+ 
+         // Progressbar on boot ?
+         if (CheckMe->pb_on_boot == NULL
+-            || (g_strcasecmp (CheckMe->pb_on_boot, "yes") != 0
+-                && g_strcasecmp (CheckMe->pb_on_boot, "no")))
++            || (g_ascii_strcasecmp (CheckMe->pb_on_boot, "yes") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_on_boot, "no")))
+         {
+                 CheckMe->pb_on_boot = g_strdup ("yes");
+         }
+ 
+         // Progressbar on shutdown
+         if (CheckMe->pb_on_shutdown == NULL
+-            || (g_strcasecmp (CheckMe->pb_on_shutdown, "yes")
+-                != 0 && g_strcasecmp (CheckMe->pb_on_shutdown, "no")))
++            || (g_ascii_strcasecmp (CheckMe->pb_on_shutdown, "yes")
++                != 0 && g_ascii_strcasecmp (CheckMe->pb_on_shutdown, "no")))
+         {
+                 CheckMe->pb_on_shutdown = g_strdup ("yes");
+         }
+ 
+         // Progressbar on resume ?
+         if (CheckMe->pb_on_resume == NULL
+-            || (g_strcasecmp (CheckMe->pb_on_resume, "yes") != 0
+-                && g_strcasecmp (CheckMe->pb_on_resume, "no")))
++            || (g_ascii_strcasecmp (CheckMe->pb_on_resume, "yes") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_on_resume, "no")))
+         {
+                 CheckMe->pb_on_resume = g_strdup ("yes");
+         }
+ 
+         // Progressbar on suspend ?
+         if (CheckMe->pb_on_suspend == NULL
+-            || (g_strcasecmp (CheckMe->pb_on_suspend, "yes") != 0
+-                && g_strcasecmp (CheckMe->pb_on_suspend, "no")))
++            || (g_ascii_strcasecmp (CheckMe->pb_on_suspend, "yes") != 0
++                && g_ascii_strcasecmp (CheckMe->pb_on_suspend, "no")))
+         {
+                 CheckMe->pb_on_suspend = g_strdup ("yes");
+         }
+ 
+         // Fade in ?
+         if (CheckMe->fadein == NULL
+-            || (g_strcasecmp (CheckMe->fadein, "yes")
+-                != 0 && g_strcasecmp (CheckMe->fadein, "no")))
++            || (g_ascii_strcasecmp (CheckMe->fadein, "yes")
++                != 0 && g_ascii_strcasecmp (CheckMe->fadein, "no")))
+         {
+                 CheckMe->fadein = g_strdup ("yes");
+         }
+ 
+         // Fade out ?
+         if (CheckMe->fadeout == NULL
+-            || (g_strcasecmp (CheckMe->fadeout, "yes")
+-                != 0 && g_strcasecmp (CheckMe->fadeout, "no")))
++            || (g_ascii_strcasecmp (CheckMe->fadeout, "yes")
++                != 0 && g_ascii_strcasecmp (CheckMe->fadeout, "no")))
+         {
+                 CheckMe->fadeout = g_strdup ("yes");
+         }

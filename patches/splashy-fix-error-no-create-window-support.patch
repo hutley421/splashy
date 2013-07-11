@@ -1,0 +1,61 @@
+Index: src/splashy_video.c
+===================================================================
+--- src/splashy_video.c
++++ src/splashy_video.c
+@@ -688,12 +688,8 @@ video_set_mode ()
+          * used to disable inputs from mouse and reduce overhead (about 15%
+          * of CPU usage)
+          */
+-        /*
+-         * FIXME video.dfb->SetCooperativeLevel (video.dfb,
+-         * DFSCL_FULLSCREEN); 
+-         */
+         video.primary_layer->SetCooperativeLevel (video.primary_layer,
+-                                                  DLSCL_EXCLUSIVE);
++                                                  DLSCL_ADMINISTRATIVE);
+         video.primary_layer->GetConfiguration (video.primary_layer,
+                                                &video.primary_layer_config);
+ 
+@@ -1158,6 +1154,8 @@ splashy_start_splash ()
+                 return -2;
+         }
+ 
++        video.dfb->SetCooperativeLevel (video.dfb, DFSCL_FULLSCREEN);
++
+         video.mode = g_new0 (splashy_videomode_t, 1);
+         /*
+          * set our expectation to a very big number 
+@@ -1197,17 +1195,6 @@ splashy_start_splash ()
+                 video.dfb->Release (video.dfb);
+                 return -3;
+         }
+-        if (video.provider->GetSurfaceDescription (video.provider,
+-                                                   &desc) != DFB_OK)
+-        {
+-                video.dfb->Release (video.dfb);
+-                return -4;
+-        }
+-        /*
+-         * flags to set the default surface as main surface
+-         */
+-        desc.flags = DSDESC_CAPS;
+-        desc.caps = DSCAPS_PRIMARY;
+ 
+         /*
+          * store our primary layer as this will be use for setting the opacity
+@@ -1231,9 +1218,12 @@ splashy_start_splash ()
+          * get our primary_surface, this will hold the progressbar, textbox
+          * and others
+          */
+-        if (video.primary_layer->GetSurface (video.primary_layer,
+-                                             &video.primary_surface)
+-            != DFB_OK)
++        desc.flags = DSDESC_CAPS;
++        desc.caps = DSCAPS_PRIMARY;
++
++        if (video.dfb->CreateSurface (video.dfb,
++                                      &desc,
++                                      &video.primary_surface) != DFB_OK)
+         {
+                 video.dfb->Release (video.dfb);
+                 return -6;

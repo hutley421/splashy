@@ -1,0 +1,27 @@
+From e2292692229a4684be81087ece7bb4074c594316 Mon Sep 17 00:00:00 2001
+From: Luis <lemsx1@gmail.com>
+Date: Fri, 11 Jun 2010 12:06:16 -0400
+Subject: [PATCH] splashy exits prematurely on systems with intel framebuffers on newer 2.6.32* kernels
+
+---
+ .../initramfs-tools/scripts/local-premount/splashy |    5 ++++-
+ 1 files changed, 4 insertions(+), 1 deletions(-)
+
+diff --git a/scripts/initramfs-tools/scripts/local-premount/splashy b/scripts/initramfs-tools/scripts/local-premount/splashy
+index fa3c556..2a42d48 100755
+--- a/scripts/initramfs-tools/scripts/local-premount/splashy
++++ b/scripts/initramfs-tools/scripts/local-premount/splashy
+@@ -32,6 +32,9 @@ done
+ test $SINGLE = "false" || exit
+ test $SPLASH = "true" || exit
+ 
+-grep -q '\(VESA\|VGA\)' /proc/fb || exit
++# newer kernels use inteldrmfb. allowing splashy to fail
++# if framebuffer is not set might be a better option:
++# users can actually see an error and report this to us
++#grep -q '\(VESA\|VGA\)' /proc/fb || exit
+ 
+ /sbin/splashy boot
+-- 
+1.7.1
+

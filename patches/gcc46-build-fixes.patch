@@ -1,0 +1,97 @@
+---
+ src/common_macros.h     |    2 +-
+ src/splashy_functions.c |   15 +++++++++++----
+ src/splashy_main.c      |    4 ++++
+ src/splashy_video.c     |    4 ----
+ 4 files changed, 16 insertions(+), 9 deletions(-)
+
+--- a/src/common_macros.h
++++ b/src/common_macros.h
+@@ -29,7 +29,7 @@
+ #define DEBUG_PRINT(str, args...) \
+   fprintf(stderr, "Splashy DEBUG %s (%d): " str "\n" , __FILE__, __LINE__, ## args)
+ #else
+-#define DEBUG_PRINT(...) while(0){}   /* NULL */
++static inline int DEBUG_PRINT(const char *str, ...) { return 0; }   /* NULL */
+ #endif
+ 
+ #define DFBCHECK(x...)                                                          \
+--- a/src/splashy_functions.c
++++ b/src/splashy_functions.c
+@@ -943,7 +943,6 @@ socket_loop (void *data)
+         gboolean _preview = *(gboolean *) data;
+         int err, i = 0;
+ 
+-        struct timeval tv;
+         struct timespec _sleep;
+         struct pollfd pfd;
+ 
+@@ -995,9 +994,6 @@ socket_loop (void *data)
+         _sleep.tv_sec = 0;
+         _sleep.tv_nsec = 10;
+ 
+-        tv.tv_sec = timeout;
+-        tv.tv_usec = 0;
+-
+         pfd.fd = sock;
+         pfd.events = POLLIN;
+ 
+@@ -1301,6 +1297,11 @@ _splashy_child (const gchar * seq)
+         thr_id_c =
+                 pthread_create (&p_thread_c, NULL, socket_loop,
+                                 (void *) &_preview);
++	if (thr_id_c) {
++                ERROR_PRINT ("Couldn't pthread_create(C). Error %d\n",
++                             thr_id_c);
++                return 1;
++	}
+ 
+         /*
+          * thread D 
+@@ -1309,6 +1310,12 @@ _splashy_child (const gchar * seq)
+          * F2 - puts splashy in verbose mode
+          */
+         thr_id_d = pthread_create (&p_thread_d, NULL, keyevent_loop, NULL);
++	if (thr_id_d) {
++                ERROR_PRINT ("Couldn't pthread_create(D). Error %d\n",
++                             thr_id_d);
++                return 1;
++	}
++
+ 
+         /*
+          * thr_id_f = pthread_create (&p_thread_f, NULL, verbose_text_loop,
+--- a/src/splashy_main.c
++++ b/src/splashy_main.c
+@@ -49,7 +49,11 @@ main (int argc, char *argv[])
+          */
+         FILE *fp;
+         fp = freopen ("/dev/null", "r+", stdin);
++	if (fp == NULL)
++		ERROR_PRINT ("%s", "cannot reopen STDIN");
+         fp = freopen ("/dev/null", "r+", stdout);
++	if (fp == NULL)
++		ERROR_PRINT ("%s", "cannot reopen STDOUT");
+         DEBUG_PRINT ("main() invoked %d", argc);
+ 
+         /*
+--- a/src/splashy_video.c
++++ b/src/splashy_video.c
+@@ -550,8 +550,6 @@ splashy_update_progressbar (gint perc)
+          */
+         if (perc < 0)
+                 return 1;
+-        if (&video == NULL)
+-                return 1;
+         if (perc > 100)
+                 return 0;
+         DEBUG_PRINT ("splashy_update_progressbar(%d) sanity checks passed",
+@@ -637,8 +635,6 @@ splashy_update_progressbar_quick (gint p
+          */
+         if (perc < 0)
+                 return 1;
+-        if (&video == NULL)
+-                return 1;
+         if (perc > 100)
+                 return 0;
+         DEBUG_PRINT

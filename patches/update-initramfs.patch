@@ -1,0 +1,13 @@
+Index: src/splashy_config-functions.c
+===================================================================
+--- src/splashy_config-functions.c
++++ src/splashy_config-functions.c
+@@ -70,7 +70,7 @@ set_new_theme (gchar * theme_name)
+          * - figure out the command to run (per distro) before printing (set
+          * to Debian for now) 
+          */
+-        const gchar *_initramfs_cmd = "update-initramfs -u";
++        const gchar *_initramfs_cmd = "update-initramfs";
+ 
+         gint ret = RETURN_ERROR;
+         GString *new_theme =
