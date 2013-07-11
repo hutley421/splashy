@@ -1,0 +1,34 @@
+<splashy>
+    <theme>
+        <!-- theme name is case sensitive. use directory name -->
+        <name>mepis_baghira</name>
+        <version>3.4-3</version>
+        <description>mepis_baghira splashy theme</description>
+        <urls>http://miga.deviantart.com/</urls>
+        <author>Martin Gallardo &gt;miga@esfera.cl&lt;</author>
+    </theme>
+    <progressbar>
+        <!-- here are tags to set the bar... x is the x coordinate and
+        y is the y coordinate, width and height are for the progress bar.
+        Remember that x, y width and height are expressed in percentage -->
+        <x>12</x>
+        <y>55</y>
+        <width>50</width>
+        <height>2</height>
+        <!-- here you can set the color of the progressbar...
+        set the amount of red, green, blue and alpha channel. 
+        Remember that the max value is 255 and the minumun value is 0-->
+        <red>255</red>
+        <green>255</green>
+        <blue>255</blue>
+        <alpha>255</alpha>
+    </progressbar>
+    <background>
+        <boot>mepis_baghira_boot.jpg</boot>
+        <shutdown>mepis_baghira_down.jpg</shutdown>
+        <errorimg>mepis_baghira_error.jpg</errorimg>
+    </background>
+    <autoverboseonerror>yes</autoverboseonerror>
+    <progressbaronboot>yes</progressbaronboot>
+    <progressbaronshutdown>yes</progressbaronshutdown>
+</splashy>

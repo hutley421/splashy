@@ -1,0 +1,26 @@
+README
+
+Mepis 3.4-3 baghira style splashy theme
+----------------------------------------
+
+Splashy theme for SimplyMEPIS 3.4-3, based in Baghira kwin style
+Author: Martin Gallardo
+mail: miga@esfera.cl
+Deviant page: http://miga.deviantart.com/
+
+Included mepis_baghira_set.xcf file to edit in The GIMP.
+
+Installation
+-----------
+
+extract the file tar gz file to any folder:
+
+tar xzf mepis_baghira-VERSION-theme.tar.gz
+
+then move the mepis_baghira folder to /etc/splashy/themes
+
+and run: 
+
+sudo splashy_config --set-theme mepis_baghira
+
+Enjoy!!!
